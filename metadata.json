@@ -1,0 +1,7 @@
+{
+  "name": "프랙탈의 아름다움",
+  "description": "초등학생과 중학생 눈높이로 배우는 프랙탈과 시어핀스키 삼각형 인터랙티브 시각화 교육 앱",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
