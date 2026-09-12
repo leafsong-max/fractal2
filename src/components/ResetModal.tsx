@@ -103,7 +103,7 @@ export const ResetModal: React.FC<ResetModalProps> = ({
             <div>
               <p className="font-bold">함부로 초기화되는 것을 방지합니다.</p>
               <p className="text-amber-800 text-[11px] mt-0.5">
-                지정된 관리자 비밀번호 <strong>1022</strong>를 입력하셔야 초기화가 실행됩니다.
+                지정된 관리자 비밀번호를 입력하셔야 초기화가 실행됩니다.
               </p>
             </div>
           </div>
@@ -132,7 +132,7 @@ export const ResetModal: React.FC<ResetModalProps> = ({
                     setPassword(e.target.value);
                     if (errorMessage) setErrorMessage('');
                   }}
-                  placeholder="비밀번호 4자리 (1022)"
+                  placeholder="관리자 비밀번호 입력"
                   disabled={isSuccess}
                   className={`w-full pl-10 pr-10 py-3 text-sm rounded-xl border transition-all font-mono tracking-widest ${
                     errorMessage

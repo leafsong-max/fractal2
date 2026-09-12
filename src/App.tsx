@@ -183,7 +183,7 @@ export default function App() {
                 id="btn-reset-top"
                 onClick={() => setIsResetModalOpen(true)}
                 className="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
-                title="비밀번호(1022) 확인 후 전체 학습 진행 상황 초기화"
+                title="관리자 비밀번호 확인 후 전체 학습 진행 상황 초기화"
               >
                 <RotateCcw className="w-4 h-4 text-rose-600" />
                 <span>초기화</span>

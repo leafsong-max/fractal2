@@ -92,13 +92,13 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="hidden sm:inline">카오스 게임</span>
             </button>
 
-            {/* Reset Button (Password: 1022) */}
+            {/* Reset Button (Protected by password) */}
             <button
               id="btn-open-reset-modal"
               type="button"
               onClick={onOpenResetModal}
               className="flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors shadow-2xs cursor-pointer"
-              title="비밀번호(1022) 확인 후 전체 학습 진행 상황 초기화"
+              title="관리자 비밀번호 확인 후 전체 학습 진행 상황 초기화"
             >
               <RotateCcw className="w-4 h-4 text-rose-600" />
               <span>초기화</span>
