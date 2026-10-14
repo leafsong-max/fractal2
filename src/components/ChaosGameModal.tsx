@@ -153,7 +153,7 @@ export const ChaosGameModal: React.FC<ChaosGameModalProps> = ({
               <p className="text-xs text-slate-500">
                 {level === 'elementary'
                   ? '주사위를 아무렇게나 굴려 점을 찍었는데 시어핀스키 삼각형이 나타나요!'
-                  : '무작위성(Randomness)과 반복적 축소 사상(IFS)이 만들어내는 자기닮음의 극한'}
+                  : '무작위성(Randomness)과 반복적 축소 사상(IFS)이 만들어내는 자기닮음의 신비'}
               </p>
             </div>
           </div>

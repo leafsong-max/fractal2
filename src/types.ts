@@ -22,6 +22,9 @@ export interface StepExplanation {
     subTitle: string;
     description: string;
     countText: string;
+    triangleCountText: string;
+    perimeterText: string;
+    areaText: string;
     analogy: string;
     badge: string;
   };
@@ -54,6 +57,10 @@ export interface NatureFractal {
   iconName: string;
   accentColor: string;
   fact: string;
+  imageUrl: string;
+  imageSource: string;
+  propertyTitle: string;
+  propertyDesc: string;
 }
 
 export interface QuizQuestion {

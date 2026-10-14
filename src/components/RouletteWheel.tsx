@@ -50,7 +50,7 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
   };
 
   const handleSpin = () => {
-    if (isSpinning) return;
+    if (isSpinning || hasSpun) return;
 
     setIsSpinning(true);
     setShowConfetti(false);
@@ -245,22 +245,30 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
               id="btn-spin-roulette"
               type="button"
               onClick={handleSpin}
-              disabled={isSpinning}
+              disabled={isSpinning || hasSpun}
               className={`px-8 py-3.5 rounded-2xl font-black text-sm sm:text-base shadow-md flex items-center gap-2 transition-all cursor-pointer ${
-                isSpinning
+                hasSpun
+                  ? 'bg-slate-200 text-slate-500 border border-slate-300 cursor-not-allowed shadow-none'
+                  : isSpinning
                   ? 'bg-slate-400 text-white cursor-not-allowed'
                   : 'bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white hover:scale-105 shadow-amber-200'
               }`}
             >
               <RotateCw className={`w-5 h-5 ${isSpinning ? 'animate-spin' : ''}`} />
-              <span>{isSpinning ? '빙글빙글 회전 중...' : '룰렛 돌리기! (START)'}</span>
+              <span>
+                {hasSpun
+                  ? '✅ 룰렛 참여 완료 (1회 한정)'
+                  : isSpinning
+                  ? '빙글빙글 회전 중...'
+                  : '룰렛 돌리기! (기회: 1회)'}
+              </span>
             </button>
-            <span className="text-[11px] text-slate-500">
-              {isSpinning
+            <span className="text-[11px] text-slate-500 text-center max-w-sm">
+              {hasSpun
+                ? '🔒 룰렛은 1회만 돌릴 수 있습니다. (재도전이 필요한 경우 상단 [초기화] 버튼을 사용하세요)'
+                : isSpinning
                 ? '과연 어떤 도움 카드가 나올까요?'
-                : hasSpun
-                ? '다시 돌리기를 눌러 다른 도움 카드도 획득해보세요!'
-                : '버튼을 눌러 룰렛을 힘차게 돌려보세요!'}
+                : '버튼을 눌러 룰렛을 힘차게 돌려보세요! (기회는 단 1회!)'}
             </span>
           </div>
         </div>
@@ -281,19 +289,19 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
               </div>
 
               <div className="text-center py-2 space-y-1">
-                <div className="text-3xl font-black text-slate-900 tracking-tight">
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                   🎉 {selectedReward.label}
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                  {selectedReward.description}
+                <p className="text-xs sm:text-sm text-indigo-700 font-bold">
+                  ({selectedReward.description})
                 </p>
               </div>
 
               <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 flex items-start gap-2 text-xs text-amber-950">
                 <CheckCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <span>
-                  축하합니다! 시어핀스키 삼각형 탐구 활동에서 자유롭게 사용할 수 있는{' '}
-                  <strong>{selectedReward.label}</strong> 보상이 지급되었습니다!
+                  축하합니다! 프랙탈 피라미드 제작 활동에서 사용할 수 있는{' '}
+                  <strong>{selectedReward.label} ({selectedReward.description})</strong> 보상이 지급되었습니다!
                 </span>
               </div>
             </div>
@@ -342,7 +350,12 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
                           className="w-3.5 h-3.5 rounded-full shrink-0 shadow-2xs"
                           style={{ backgroundColor: slice.color }}
                         />
-                        <span className="font-extrabold text-slate-900 text-sm">{slice.label}</span>
+                        <span className="font-extrabold text-slate-900 text-sm">
+                          {slice.label}
+                          <span className="ml-1 text-xs font-medium text-slate-600">
+                            ({slice.description})
+                          </span>
+                        </span>
                       </div>
                       {isSelected && (
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-400 text-slate-950">
@@ -350,9 +363,6 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-500 pl-5.5 leading-relaxed">
-                      {slice.description}
-                    </p>
                   </div>
                 );
               })}
@@ -362,7 +372,7 @@ export const RouletteWheel: React.FC<RouletteWheelProps> = ({ level, onSpinCompl
             <div className="pt-2 text-[11px] text-slate-500 leading-normal flex items-start gap-1">
               <HelpCircle className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
               <span>
-                룰렛을 돌리면 4가지 도움 카드 중 하나가 랜덤으로 당첨됩니다. 획득한 카드로 프랙탈 탐험을 즐겨보세요!
+                룰렛을 돌리면 4가지 도움 카드 중 하나가 랜덤으로 당첨됩니다. 획득한 카드로 프랙탈 피라미드(총 8장) 제작에 도움을 받아보세요!
               </span>
             </div>
           </div>

@@ -80,6 +80,14 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({ level, onNavig
     setIsCompleted(false);
   };
 
+  const handleRetryCurrent = () => {
+    setSelectedAnswers((prev) => {
+      const updated = { ...prev };
+      delete updated[currentQ.id];
+      return updated;
+    });
+  };
+
   // Score calculation
   const score = Object.entries(selectedAnswers).reduce((acc, [qId, ans]) => {
     const q = questions.find((item) => item.id === Number(qId));
@@ -107,11 +115,26 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({ level, onNavig
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full self-start sm:self-auto">
-          <GraduationCap className="w-4 h-4 text-indigo-600" />
-          <span>
-            문제: {Math.min(currentIdx + 1, questions.length)} / {questions.length} (총 2문제)
-          </span>
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-full">
+            <GraduationCap className="w-4 h-4 text-indigo-600" />
+            <span>
+              문제: {Math.min(currentIdx + 1, questions.length)} / {questions.length} (총 2문제)
+            </span>
+          </div>
+
+          {(currentIdx > 0 || isAnswered) && (
+            <button
+              type="button"
+              id="btn-quiz-restart"
+              onClick={handleReset}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+              title="문제를 처음(1번)부터 다시 시작합니다"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
+              <span>처음부터 재도전</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -129,20 +152,35 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({ level, onNavig
                 </span>
               </div>
 
-              {/* Hint Toggle */}
-              <button
-                type="button"
-                onClick={() =>
-                  setShowHint((prev) => ({
-                    ...prev,
-                    [currentQ.id]: !prev[currentQ.id],
-                  }))
-                }
-                className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 cursor-pointer"
-              >
-                <HelpCircle className="w-3.5 h-3.5" />
-                <span>{showHint[currentQ.id] ? '힌트 닫기' : '힌트 보기'}</span>
-              </button>
+              <div className="flex items-center gap-2">
+                {isAnswered && (
+                  <button
+                    type="button"
+                    id="btn-retry-top"
+                    onClick={handleRetryCurrent}
+                    className="text-xs bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+                    title="현재 문제를 다시 풉니다"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5 text-indigo-600" />
+                    <span>이 문제 재도전</span>
+                  </button>
+                )}
+
+                {/* Hint Toggle */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowHint((prev) => ({
+                      ...prev,
+                      [currentQ.id]: !prev[currentQ.id],
+                    }))
+                  }
+                  className="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1 cursor-pointer"
+                >
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  <span>{showHint[currentQ.id] ? '힌트 닫기' : '힌트 보기'}</span>
+                </button>
+              </div>
             </div>
 
             {/* Hint Box */}
@@ -235,13 +273,28 @@ export const InteractiveQuiz: React.FC<InteractiveQuizProps> = ({ level, onNavig
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={handleNext}
-                className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shrink-0 transition-colors shadow-xs cursor-pointer self-end sm:self-auto"
-              >
-                {currentIdx < questions.length - 1 ? '다음 문제 ➔' : '결과 확인 & 룰렛 🏆'}
-              </button>
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto flex-wrap">
+                <button
+                  type="button"
+                  id="btn-retry-bottom"
+                  onClick={handleRetryCurrent}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs sm:text-sm transition-colors shadow-2xs cursor-pointer"
+                  title="현재 문제를 다시 풉니다"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-slate-600" />
+                  <span>재도전</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="btn-next-question"
+                  onClick={handleNext}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shrink-0 transition-colors shadow-xs cursor-pointer"
+                >
+                  <span>{currentIdx < questions.length - 1 ? '다음 문제' : '결과 확인 & 룰렛 🏆'}</span>
+                  {currentIdx < questions.length - 1 && <ArrowRight className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
           )}
         </div>

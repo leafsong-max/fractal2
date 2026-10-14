@@ -1,165 +1,198 @@
 import React, { useState } from 'react';
 import { EducationLevel } from '../types';
 import { NATURE_FRACTALS } from '../data/fractalData';
-import { Sparkles, Snowflake, Leaf, Zap, HelpCircle, Check, Info } from 'lucide-react';
+import { Sparkles, Snowflake, Leaf, CheckCircle2, ExternalLink, ZoomIn } from 'lucide-react';
 
 interface FractalIntroProps {
   level: EducationLevel;
 }
 
 export const FractalIntro: React.FC<FractalIntroProps> = ({ level }) => {
-  const [selectedFractal, setSelectedFractal] = useState(NATURE_FRACTALS[0]);
+  const [activeId, setActiveId] = useState<string>(NATURE_FRACTALS[0].id);
+  const [modalImage, setModalImage] = useState<{ url: string; title: string; source: string } | null>(null);
 
-  const getIcon = (name: string) => {
-    switch (name) {
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
       case 'Sparkles':
         return <Sparkles className="w-5 h-5 text-emerald-500" />;
-      case 'Snowflake':
-        return <Snowflake className="w-5 h-5 text-sky-500" />;
       case 'Leaf':
         return <Leaf className="w-5 h-5 text-teal-500" />;
-      case 'Zap':
-        return <Zap className="w-5 h-5 text-amber-500" />;
+      case 'Snowflake':
+        return <Snowflake className="w-5 h-5 text-sky-500" />;
       default:
         return <Sparkles className="w-5 h-5 text-indigo-500" />;
     }
   };
 
   return (
-    <section className="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5 sm:p-8 space-y-6">
-      {/* Intro Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-200">
+    <section className="bg-white rounded-3xl shadow-sm border border-slate-200/80 p-5 sm:p-8 space-y-7">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-100">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xl">🌿</span>
-            <h3 className="text-lg sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-              프랙탈(Fractal)이란 무엇일까요?
+            <span className="text-2xl">🌿</span>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              자연 속 프랙탈(Fractal) 탐구실
             </h3>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             {level === 'elementary'
-              ? '자연과 수학 속에 숨어있는 신비한 반복 무늬를 찾아보아요!'
-              : '자기닮음(Self-Similarity)과 반복적 순환 구조로 정의되는 기하학의 세계'}
+              ? '자연 속 3가지 신비한 사물 사진을 보며 프랙탈의 대표적인 성질을 찾아보아요!'
+              : '자연계에 존재하는 3가지 프랙탈 구조의 실사 사진과 기하학적 대표 성질 분석'}
           </p>
         </div>
+
+        <span className="self-start sm:self-auto text-xs font-bold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+          <span>자연의 3가지 대표 예시</span>
+        </span>
       </div>
 
-      {/* Core Definition Cards according to Level */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
-          <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-sm mb-3">
-            1
-          </div>
-          <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5">
-            {level === 'elementary' ? '스스로를 닮은 "자기닮음"' : '자기닮음성 (Self-Similarity)'}
-          </h4>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            {level === 'elementary'
-              ? '작은 조각을 돋보기로 들여다보아도 전체 모양과 똑같이 생겼어요. 거울 속에 거울이 끝없이 비치는 것과 같아요.'
-              : '어떤 도형의 일부분을 확대했을 때 전체 도형과 통계적 또는 기하학적으로 합동이거나 닮음인 성질을 의미합니다.'}
-          </p>
-        </div>
+      {/* 3 Natural Fractal Cards with Real Photos & Sources & Properties */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {NATURE_FRACTALS.slice(0, 3).map((item) => {
+          const isActive = activeId === item.id;
 
-        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
-          <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-sm mb-3">
-            2
-          </div>
-          <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5">
-            {level === 'elementary' ? '단순한 규칙의 끝없는 반복' : '재귀적 생성 규칙 (Recursion)'}
-          </h4>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            {level === 'elementary'
-              ? '"가운데 1개를 뺀다"라는 아주 단순한 규칙 하나를 계속 되풀이했을 뿐인데, 마법처럼 정교한 예술 작품이 탄생해요!'
-              : '단순한 함수나 분할 알고리즘을 무한히 반복(Iteration)함으로써 복잡한 비선형적 패턴이 형성됩니다.'}
-          </p>
-        </div>
-
-        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
-          <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-sm mb-3">
-            3
-          </div>
-          <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-1.5">
-            {level === 'elementary' ? '자연이 선택한 가장 똑똑한 모양' : '자연계의 최적화 구조'}
-          </h4>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            {level === 'elementary'
-              ? '우리 몸속 혈관, 허파의 숨길, 나뭇가지, 눈꽃 등 자연의 모든 것은 가장 튼튼하고 효율적인 프랙탈로 만들어져 있어요!'
-              : '적은 부피(면적) 안에 최대의 표면적과 둘레를 확보하여 물질과 에너지를 효율적으로 교환하기 위한 자연의 최적화입니다.'}
-          </p>
-        </div>
-      </div>
-
-      {/* Nature Fractals Interactive Selector */}
-      <div className="pt-2">
-        <h4 className="text-sm sm:text-base font-bold text-slate-900 mb-3 flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-amber-500" />
-          <span>자연 속에서 만나는 프랙탈 친구들 (클릭해서 확인해보세요!)</span>
-        </h4>
-
-        {/* Buttons Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
-          {NATURE_FRACTALS.map((frac) => (
-            <button
-              key={frac.id}
-              type="button"
-              onClick={() => setSelectedFractal(frac)}
-              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
-                selectedFractal.id === frac.id
-                  ? 'border-indigo-600 bg-indigo-50/50 shadow-xs ring-2 ring-indigo-500/20'
-                  : 'border-slate-200 hover:border-slate-300 bg-white'
+          return (
+            <div
+              key={item.id}
+              onClick={() => setActiveId(item.id)}
+              className={`rounded-2xl border overflow-hidden transition-all flex flex-col bg-slate-50/50 cursor-pointer ${
+                isActive
+                  ? 'border-emerald-500 ring-2 ring-emerald-400/30 shadow-md bg-white'
+                  : 'border-slate-200 hover:border-slate-300 hover:shadow-xs'
               }`}
             >
-              <div className="flex items-center justify-between mb-1.5">
-                {getIcon(frac.iconName)}
-                {selectedFractal.id === frac.id && (
-                  <Check className="w-4 h-4 text-indigo-600" />
-                )}
-              </div>
-              <div className="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1">
-                {frac.koreanName}
-              </div>
-              <div className="text-[11px] text-slate-600 font-mono">
-                {frac.name.split(' ')[0]}
-              </div>
-            </button>
-          ))}
-        </div>
+              {/* Photo Area with Source Attribution */}
+              <div className="relative aspect-4/3 w-full bg-slate-800 overflow-hidden group">
+                <img
+                  src={item.imageUrl}
+                  alt={item.koreanName}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
 
-        {/* Selected Fractal Detail View */}
-        <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/90 flex flex-col md:flex-row gap-5 items-center">
-          {/* Visual Badge Graphic */}
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 flex flex-col items-center justify-center text-white shrink-0 shadow-sm p-2 text-center">
-            {getIcon(selectedFractal.iconName)}
-            <span className="text-xs font-bold mt-2 text-indigo-200">
-              {selectedFractal.koreanName.split(' ')[0]}
-            </span>
-            <span className="text-[10px] text-slate-400 font-mono">자연의 프랙탈</span>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+
+                {/* Magnify Preview Button */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setModalImage({ url: item.imageUrl, title: item.koreanName, source: item.imageSource });
+                  }}
+                  className="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-slate-900/70 hover:bg-slate-900 text-white backdrop-blur-xs transition-colors cursor-pointer"
+                  title="사진 크게 보기"
+                >
+                  <ZoomIn className="w-4 h-4" />
+                </button>
+
+                {/* Badge on Photo */}
+                <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-white">
+                  <div className="flex items-center gap-1.5">
+                    <span className="p-1 rounded-md bg-white/20 backdrop-blur-xs">
+                      {getIcon(item.iconName)}
+                    </span>
+                    <span className="font-extrabold text-sm sm:text-base drop-shadow-xs">
+                      {item.koreanName}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Source Tag below photo */}
+              <div className="px-3.5 py-1.5 bg-slate-100/90 border-b border-slate-200/80 text-[10px] text-slate-500 font-mono flex items-center justify-between">
+                <span>{item.imageSource}</span>
+                <span className="text-[10px] text-emerald-600 font-sans font-semibold">실사 사진</span>
+              </div>
+
+              {/* Content Body */}
+              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3.5">
+                {/* Core Property Card */}
+                <div className="rounded-xl bg-emerald-50/80 border border-emerald-200/80 p-3 text-xs">
+                  <div className="font-black text-emerald-900 flex items-center gap-1 mb-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>{item.propertyTitle}</span>
+                  </div>
+                  <p className="text-emerald-950 text-[11px] leading-relaxed">
+                    {item.propertyDesc}
+                  </p>
+                </div>
+
+                {/* Level-specific description */}
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {level === 'elementary' ? item.descriptionElementary : item.descriptionMiddle}
+                </p>
+
+                {/* Discovery Fact Footer */}
+                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex items-start gap-1">
+                  <span className="font-bold text-slate-700 shrink-0">💡 꿀팁:</span>
+                  <span>{item.fact}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 3 Core Properties Summary Banner */}
+      <div className="rounded-2xl bg-gradient-to-br from-indigo-50/70 via-white to-emerald-50/70 border border-slate-200 p-4 sm:p-5">
+        <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <Sparkles className="w-4 h-4 text-indigo-600" />
+          <span>프랙탈이 가진 3가지 대표적인 성질 한눈에 정리</span>
+        </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="bg-white rounded-xl p-3 border border-slate-200/70 shadow-2xs">
+            <span className="font-extrabold text-indigo-700 block mb-0.5">1. 자기닮음 (Self-Similarity)</span>
+            <p className="text-slate-600 text-[11px]">작은 조각을 아무리 확대해도 전체 모습과 똑같이 생겼어요.</p>
           </div>
-
-          {/* Description */}
-          <div className="space-y-2 flex-1 text-center md:text-left">
-            <div className="flex items-center justify-center md:justify-start gap-2">
-              <h5 className="text-base sm:text-lg font-bold text-slate-900">
-                {selectedFractal.koreanName}
-              </h5>
-              <span className="text-xs font-mono text-slate-600 hidden sm:inline">
-                ({selectedFractal.name})
-              </span>
-            </div>
-
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-              {level === 'elementary'
-                ? selectedFractal.descriptionElementary
-                : selectedFractal.descriptionMiddle}
-            </p>
-
-            <div className="inline-flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50/80 px-3 py-1 rounded-lg border border-indigo-100 font-medium">
-              <span>💡 발견 포인트:</span>
-              <span>{selectedFractal.fact}</span>
-            </div>
+          <div className="bg-white rounded-xl p-3 border border-slate-200/70 shadow-2xs">
+            <span className="font-extrabold text-teal-700 block mb-0.5">2. 규칙의 반복 (Recursion)</span>
+            <p className="text-slate-600 text-[11px]">단순한 나눔 규칙 하나를 끝없이 되풀이하여 만듭니다.</p>
+          </div>
+          <div className="bg-white rounded-xl p-3 border border-slate-200/70 shadow-2xs">
+            <span className="font-extrabold text-sky-700 block mb-0.5">3. 자연의 최적화 (Efficiency)</span>
+            <p className="text-slate-600 text-[11px]">작은 부피 안에 최대의 둘레와 표면적을 확보하여 생명을 지켜요.</p>
           </div>
         </div>
       </div>
+
+      {/* Modal for full photo viewing */}
+      {modalImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn cursor-pointer"
+          onClick={() => setModalImage(null)}
+        >
+          <div
+            className="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-slate-700 cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative aspect-4/3 w-full bg-black">
+              <img
+                src={modalImage.url}
+                alt={modalImage.title}
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="p-4 sm:p-5 flex items-center justify-between bg-slate-900 text-white">
+              <div>
+                <h5 className="font-bold text-base">{modalImage.title}</h5>
+                <p className="text-xs text-slate-400 mt-0.5">{modalImage.source}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalImage(null)}
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold cursor-pointer"
+              >
+                닫기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

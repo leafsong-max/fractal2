@@ -8,6 +8,9 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       subTitle: '아직 아무것도 자르지 않은 온전한 정삼각형이에요!',
       description: '책상 위에 커다란 색종이 정삼각형 1장이 놓여 있어요. 아직 구멍이 하나도 뚫리지 않았죠.',
       countText: '남은 삼각형: 1개',
+      triangleCountText: '1개',
+      perimeterText: '처음 둘레 (1배)',
+      areaText: '처음 넓이 (100% 전체)',
       analogy: '🍕 맛있는 피자 한 판이 그대로 있는 모습이에요.',
       badge: '시작!'
     },
@@ -36,7 +39,10 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '1단계: 가운데 구멍 1개 뚫기',
       subTitle: '가운데 거꾸로 된 삼각형을 쏙 빼냈어요!',
       description: '삼각형 세 변의 정가운데(중점)를 이어서 가운데 생긴 역삼각형 1개를 빼냈어요! 주위에 작은 삼각형 3개가 남았네요.',
-      countText: '남은 삼각형: 3개 (1 × 3)',
+      countText: '남은 삼각형: 3개 (1개 × 3배)',
+      triangleCountText: '3개 (1개 × 3배)',
+      perimeterText: '1.5배 (1과 1/2배로 늘어남)',
+      areaText: '4분의 3 (75% 남음)',
       analogy: '🪟 가운데에 삼각형 모양 창문을 하나 뚫은 셈이에요.',
       badge: '구멍 1개 뚫림'
     },
@@ -65,7 +71,10 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '2단계: 남은 3개에서 또 가운데 구멍 뚫기!',
       subTitle: '3개 각각에서 구멍을 뚫으니 3 × 3 = 9개가 되었어요!',
       description: '남아있던 3개의 삼각형마다 똑같이 가운데를 쏙 오려냈어요. 3개마다 각각 3개씩 남으니까 3 × 3 = 9개가 되었답니다!',
-      countText: '남은 삼각형: 9개 (3 × 3)',
+      countText: '남은 삼각형: 9개 (3개 × 3배)',
+      triangleCountText: '9개 (3개 × 3배)',
+      perimeterText: '2.25배 (2와 1/4배로 늘어남)',
+      areaText: '16분의 9 (약 56% 남음)',
       analogy: '🌿 나뭇가지가 갈라지듯 3개씩 3배로 쑥쑥 번져가요.',
       badge: '삼각형 9개!'
     },
@@ -94,7 +103,10 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '3단계: 9개에서 또 3배! 27개!',
       subTitle: '점점 더 촘촘하고 예쁜 레이스 무늬가 되어가요!',
       description: '남아있는 9개의 삼각형마다 또 가운데를 쏙쏙 오려냈어요. 9 × 3 = 27개! 무늬가 마치 예술 작품처럼 섬세해지고 있어요.',
-      countText: '남은 삼각형: 27개 (9 × 3)',
+      countText: '남은 삼각형: 27개 (9개 × 3배)',
+      triangleCountText: '27개 (9개 × 3배)',
+      perimeterText: '약 3.4배 (3배 넘게 길어짐)',
+      areaText: '64분의 27 (약 42% 남음)',
       analogy: '❄️ 할머니가 뜨개질한 고운 레이스 식탁보 같아요.',
       badge: '삼각형 27개!'
     },
@@ -114,7 +126,7 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       perimeterFormula: '3 × (3/2)³ = 10.125',
       perimeterFormulaLatex: '3 \\times \\left(\\frac{3}{2}\\right)^3 = \\frac{81}{8} = 10.125',
       perimeterVal: 10.125,
-      mathInsight: '초기 둘레 3에서 이미 10.125로 3배 이상 길어졌습니다. 둘레는 공비가 1보다 큰 등비수열(r = 3/2)을 이룹니다.'
+      mathInsight: '초기 둘레 3에서 이미 10.125로 3배 이상 길어졌습니다. 둘레는 매 단계마다 3/2배(1.5배)씩 계속 곱해져 거듭제곱으로 길어집니다.'
     }
   },
   {
@@ -123,14 +135,17 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '4단계: 27개가 3배! 무려 81개!',
       subTitle: '눈으로 다 세기 힘들 정도로 많아졌어요!',
       description: '27개 삼각형마다 가운데를 또 오려내니 27 × 3 = 81개! 어디를 확대해서 보아도 맨 처음 1단계 모양과 똑같은 모양이 숨어 있어요.',
-      countText: '남은 삼각형: 81개 (27 × 3)',
+      countText: '남은 삼각형: 81개 (27개 × 3배)',
+      triangleCountText: '81개 (27개 × 3배)',
+      perimeterText: '약 5.1배 (5배 넘게 길어짐)',
+      areaText: '256분의 81 (약 32% 남음)',
       analogy: '🔍 돋보기로 일부분을 확대해도 전체 모습과 꼭 닮아있어요!',
       badge: '삼각형 81개!'
     },
     middle: {
       title: '4단계 (n = 4): 거듭제곱 n = 4 적용',
-      subTitle: '지수함수적 증가 (Exponential Growth)',
-      description: '삼각형 개수는 3⁴ = 81개로 폭발적으로 늘어납니다. 반면 한 변의 길이는 1/16로 작아졌습니다.',
+      subTitle: '3의 거듭제곱: 3⁴ = 81개',
+      description: '삼각형 개수는 3⁴ = 81개로 폭발적으로 늘어납니다. 반면 한 변의 길이는 (1/2)⁴ = 1/16로 작아졌습니다.',
       triangleCountFormula: '3⁴ = 81개',
       triangleCountFormulaLatex: '3^4 = 81',
       triangleCountVal: 81,
@@ -143,7 +158,7 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       perimeterFormula: '3 × (3/2)⁴ = 15.188',
       perimeterFormulaLatex: '3 \\times \\left(\\frac{3}{2}\\right)^4 = \\frac{243}{16} \\approx 15.188',
       perimeterVal: 15.188,
-      mathInsight: '남은 면적이 처음의 1/3 수준(31.6%)으로 줄어들었습니다. 지수 밑이 1보다 작으면 거듭제곱할수록 0에 가까워집니다.'
+      mathInsight: '남은 면적이 처음의 1/3 수준(31.6%)으로 줄어들었습니다. (3/4)과 같이 1보다 작은 분수를 거듭제곱할수록 값은 0에 가까워집니다.'
     }
   },
   {
@@ -152,14 +167,17 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '5단계: 81개 × 3 = 243개!',
       subTitle: '삼각형이 모여서 신비한 삼각형 그물이 되었어요.',
       description: '삼각형이 무려 243개! 점처럼 작아진 삼각형들이 서로 손을 잡고 커다란 삼각형 형태를 유지하고 있어요.',
-      countText: '남은 삼각형: 243개',
+      countText: '남은 삼각형: 243개 (81개 × 3배)',
+      triangleCountText: '243개 (81개 × 3배)',
+      perimeterText: '약 7.6배 (7배 넘게 길어짐)',
+      areaText: '1024분의 243 (약 24% 남음)',
       analogy: '🕸️ 가볍고 튼튼한 거미줄 다리 건축물 같아요.',
       badge: '삼각형 243개!'
     },
     middle: {
-      title: '5단계 (n = 5): n = 5 단계와 극한의 경향성',
+      title: '5단계 (n = 5): 거듭제곱 지수 n = 5 적용',
       subTitle: '면적 감소와 둘레 증가의 뚜렷한 대비',
-      description: '삼각형 개수 3⁵ = 243개. 한 변 길이는 1/32. 둘레는 22.78에 이릅니다.',
+      description: '삼각형 개수 3⁵ = 243개. 한 변 길이는 (1/2)⁵ = 1/32. 둘레는 3 × (3/2)⁵ ≈ 22.78에 이릅니다.',
       triangleCountFormula: '3⁵ = 243개',
       triangleCountFormulaLatex: '3^5 = 243',
       triangleCountVal: 243,
@@ -172,7 +190,7 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       perimeterFormula: '3 × (3/2)⁵ ≈ 22.781',
       perimeterFormulaLatex: '3 \\times \\left(\\frac{3}{2}\\right)^5 \\approx 22.781',
       perimeterVal: 22.781,
-      mathInsight: '공비 3/4의 n제곱은 n이 커질수록 0으로 향하고, 공비 3/2의 n제곱은 무한대(∞)로 향하는 현상을 뚜렷이 관찰할 수 있습니다.'
+      mathInsight: '(3/4)의 거듭제곱은 단계가 올라갈수록 0에 가까워지고, (3/2)의 거듭제곱은 단계가 올라갈수록 엄청나게 커지는 규칙을 뚜렷이 관찰할 수 있습니다.'
     }
   },
   {
@@ -181,14 +199,17 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       title: '6단계: 243개 × 3 = 729개!',
       subTitle: '마법처럼 환상적인 최종 프랙탈 예술!',
       description: '작은 삼각형 729개가 촘촘히 빛나요. 끝없이 자르고 잘라도 자기 자신과 똑같은 모양이 영원히 반복됩니다!',
-      countText: '남은 삼각형: 729개',
+      countText: '남은 삼각형: 729개 (243개 × 3배)',
+      triangleCountText: '729개 (243개 × 3배)',
+      perimeterText: '약 11.4배 (11배 넘게 길어짐)',
+      areaText: '4096분의 729 (약 18% 남음, 0에 가까워짐)',
       analogy: '✨ 우주에서 가장 정교한 수학 보석 목걸이 같아요!',
       badge: '마스터 완성!'
     },
     middle: {
-      title: '6단계 (n = 6): 극한으로 가는 길 (n → ∞)',
-      subTitle: '프랙탈 차원 D = log 3 / log 2 ≈ 1.585',
-      description: '삼각형 개수 3⁶ = 729개, 면적 17.8%, 둘레 34.17. 만약 무한히 반복하면 넓이는 0이 되고, 둘레는 무한대가 됩니다!',
+      title: '6단계 (n = 6): 거듭제곱으로 완성하는 프랙탈',
+      subTitle: '삼각형 개수 3⁶ = 729개',
+      description: '삼각형 개수 3⁶ = 729개, 면적 (3/4)⁶ ≈ 17.8%, 둘레 3 × (3/2)⁶ ≈ 34.17. 단계를 계속 반복할수록 넓이는 점점 0에 가까워지고 둘레는 끝없이 길어집니다!',
       triangleCountFormula: '3⁶ = 729개',
       triangleCountFormulaLatex: '3^6 = 729',
       triangleCountVal: 729,
@@ -201,7 +222,7 @@ export const STEP_EXPLANATIONS: StepExplanation[] = [
       perimeterFormula: '3 × (3/2)⁶ ≈ 34.172',
       perimeterFormulaLatex: '3 \\times \\left(\\frac{3}{2}\\right)^6 \\approx 34.172',
       perimeterVal: 34.172,
-      mathInsight: '넓이는 0인데 둘레는 무한대인 신기한 도형! 1차원 선(둘레)보다는 크고 2차원 면(넓이)보다는 작아서 차원이 1.585차원인 프랙탈이 됩니다.'
+      mathInsight: '넓이는 계속 줄어들어 점점 0에 가까워지는데 둘레는 끝없이 길어지는 신기한 도형! 1차원 선(둘레)보다는 크고 2차원 면(넓이)보다는 작아서 차원이 약 1.585차원인 프랙탈이 됩니다.'
     }
   }
 ];
@@ -211,41 +232,43 @@ export const NATURE_FRACTALS: NatureFractal[] = [
     id: 'romanesco',
     name: 'Romanesco Broccoli',
     koreanName: '로마네스코 브로콜리',
-    descriptionElementary: '봉우리 하나를 떼어내도 전체 브로콜리와 꼭 닮은 원뿔 나선 모양이에요!',
-    descriptionMiddle: '자연에서 볼 수 있는 가장 완벽한 3차원 프랙탈. 피보나치 수열 나선과 자기닮음이 결합되어 있습니다.',
+    descriptionElementary: '작은 봉우리 하나를 떼어내도 전체 브로콜리와 완전히 똑같은 원뿔 나선 모양이에요!',
+    descriptionMiddle: '자연에서 관찰되는 가장 완벽한 3차원 프랙탈. 피보나치 수열 나선과 자기닮음이 결합되어 있습니다.',
     iconName: 'Sparkles',
     accentColor: 'from-emerald-500 to-green-600',
-    fact: '작은 꽃봉오리 하나가 전체 브로콜리의 미니어처 버전이에요!'
-  },
-  {
-    id: 'snowflake',
-    name: 'Snowflake (Koch Snowflake)',
-    koreanName: '눈송이 (코흐 눈송이)',
-    descriptionElementary: '눈꽃의 뾰족한 가지마다 똑같은 작은 가시들이 줄줄이 돋아나 있어요!',
-    descriptionMiddle: '삼각형 변에 계속해서 1/3 크기의 삼각형을 덧붙여 만든 프랙탈. 유한한 면적에 무한한 둘레를 갖습니다.',
-    iconName: 'Snowflake',
-    accentColor: 'from-sky-500 to-blue-600',
-    fact: '유한한 면적 속에 무한한 길이의 해안선이 담겨있는 원리와 같아요!'
+    fact: '작은 꽃봉오리 하나가 전체 브로콜리의 완벽한 축소판(미니어처)이에요!',
+    imageUrl: 'https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?auto=format&fit=crop&w=800&q=80',
+    imageSource: '사진 출처: Unsplash / Wikimedia Commons (Public Domain)',
+    propertyTitle: '대표 성질: 자기닮음성 (Self-Similarity)',
+    propertyDesc: '어떤 부분을 확대해 보아도 전체 모양과 꼭 닮은 형태가 끝없이 반복되는 프랙탈의 가장 핵심적인 성질입니다.'
   },
   {
     id: 'fern',
     name: 'Fern Leaf (Barnsley Fern)',
-    koreanName: '양치식물(고사리) 잎',
-    descriptionElementary: '큰 고사리 잎 하나를 자세히 보면 작은 고사리 잎들이 줄지어 붙어있어요!',
-    descriptionMiddle: '반스레이 펀(Barnsley Fern): 아핀 변환(Affine Transformation) 수식 4개만으로 컴퓨터가 실제 고사리 잎과 똑같이 그려냅니다.',
+    koreanName: '고사리 잎 (양치식물)',
+    descriptionElementary: '큰 고사리 잎 하나를 자세히 보면 작은 고사리 잎들이 줄지어 똑같은 모양으로 붙어있어요!',
+    descriptionMiddle: '반스레이 펀(Barnsley Fern): 아핀 변환 수식 4개만으로 컴퓨터가 실제 고사리 잎과 똑같이 그려냅니다.',
     iconName: 'Leaf',
     accentColor: 'from-teal-500 to-emerald-600',
-    fact: '잎사귀 하나, 작은 잎 하나, 줄기 하나의 모양이 모두 같은 구조예요.'
+    fact: '줄기 전체의 각도와 작은 잎사귀가 뻗어 나오는 각도가 수학적으로 완벽히 일치해요.',
+    imageUrl: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80',
+    imageSource: '사진 출처: Unsplash / Wikimedia Commons (CC BY-SA)',
+    propertyTitle: '대표 성질: 규칙적 가지치기와 반복 (Recursion)',
+    propertyDesc: '하나의 단순한 가지치기 규칙이 무한히 되풀이되면서 자연계의 놀랍도록 정교한 잎사귀와 나뭇가지를 만듭니다.'
   },
   {
-    id: 'lightning',
-    name: 'Lightning & River Network',
-    koreanName: '번개와 강줄기',
-    descriptionElementary: '하늘에서 번개가 칠 때 큰 줄기에서 작은 줄기가 나뭇가지처럼 갈라져요!',
-    descriptionMiddle: '전기 저항이 가장 적은 경로를 찾는 자연의 에너지 방출 경로가 프랙탈 가지치기(Branching)를 형성합니다.',
-    iconName: 'Zap',
-    accentColor: 'from-amber-500 to-orange-600',
-    fact: '우리 몸 속 혈관과 폐의 기관지도 산소를 효율적으로 전달하기 위해 프랙탈 구조로 되어 있어요!'
+    id: 'snowflake',
+    name: 'Snowflake (Koch Snowflake)',
+    koreanName: '눈송이 결정 (코흐 눈송이)',
+    descriptionElementary: '눈꽃의 6갈래 뾰족한 가지마다 똑같은 작은 가시들이 줄줄이 대칭으로 돋아나 있어요!',
+    descriptionMiddle: '삼각형 변에 계속해서 1/3 크기의 삼각형을 덧붙여 만든 프랙탈. 유한한 면적에 무한한 둘레를 갖습니다.',
+    iconName: 'Snowflake',
+    accentColor: 'from-sky-500 to-blue-600',
+    fact: '손바닥만 한 작은 면적 속에 무한히 긴 둘레 테두리가 숨어있어요!',
+    imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
+    imageSource: '사진 출처: Unsplash / Wilson Bentley Collection (Public Domain)',
+    propertyTitle: '대표 성질: 유한한 면적 속 무한한 둘레 (Infinite Perimeter)',
+    propertyDesc: '공간은 일정하지만 테두리 둘레가 쉼 없이 꺾이고 늘어나면서 열과 에너지를 효율적으로 교환할 수 있습니다.'
   }
 ];
 
@@ -328,7 +351,7 @@ export const ROULETTE_OPTIONS: RouletteOption[] = [
     color: '#3b82f6',      // Blue
     textColor: '#ffffff',
     accentBg: 'bg-blue-50 border-blue-200 text-blue-900',
-    description: '시어핀스키 삼각형 3단계까지 자동으로 힌트를 주는 행운의 찬스 카드!'
+    description: '프랙탈 피라미드 8장 중 3장 도움'
   },
   {
     id: '4장 도움',
@@ -338,7 +361,7 @@ export const ROULETTE_OPTIONS: RouletteOption[] = [
     color: '#10b981',      // Emerald
     textColor: '#ffffff',
     accentBg: 'bg-emerald-50 border-emerald-200 text-emerald-900',
-    description: '프랙탈 4단계(81개 삼각형)의 숨은 패턴을 한눈에 밝혀주는 탐험 카드!'
+    description: '프랙탈 피라미드 8장 중 4장 도움'
   },
   {
     id: '5장 도움',
@@ -348,7 +371,7 @@ export const ROULETTE_OPTIONS: RouletteOption[] = [
     color: '#f59e0b',      // Amber
     textColor: '#0f172a',
     accentBg: 'bg-amber-50 border-amber-200 text-amber-950',
-    description: '초등학생 모드 최고 인기! 5단계(243개 삼각형)를 빠르게 조작하는 슈퍼 부스터!'
+    description: '프랙탈 피라미드 8장 중 5장 도움'
   },
   {
     id: '6장 도움',
@@ -358,7 +381,7 @@ export const ROULETTE_OPTIONS: RouletteOption[] = [
     color: '#8b5cf6',      // Purple
     textColor: '#ffffff',
     accentBg: 'bg-purple-50 border-purple-200 text-purple-900',
-    description: '궁극의 마스터 카드! 6단계(729개 삼각형)와 프랙탈 차원 마스터 인증서!'
+    description: '프랙탈 피라미드 8장 중 6장 도움'
   }
 ];
 

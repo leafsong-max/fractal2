@@ -15,7 +15,10 @@ import {
   Layers,
   Palette,
   Hash,
-  Eye
+  Maximize2,
+  TrendingUp,
+  Ruler,
+  Square
 } from 'lucide-react';
 
 interface SierpinskiCanvasProps {
@@ -49,10 +52,10 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const playTimerRef = useRef<number | null>(null);
 
-  // Dimension setup for SVG coordinate system
-  const width = 600;
-  const height = 520;
-  const padding = 20;
+  // Dimension setup for SVG coordinate system (Large Studio view)
+  const width = 720;
+  const height = 580;
+  const padding = 24;
 
   // Root triangle vertices (Equilateral Triangle)
   const rootP1: Point = { x: width / 2, y: padding };
@@ -65,7 +68,7 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
     y: (a.y + b.y) / 2,
   });
 
-  // Calculate remaining triangles and removed hole triangles recursively
+  // Calculate remaining triangles and removed hole triangles recursively up to depth 6
   const { triangles, holes } = useMemo(() => {
     const triList: TriangleNode[] = [];
     const holeList: { id: string; p1: Point; p2: Point; p3: Point; depth: number }[] = [];
@@ -117,7 +120,7 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
           }
           return prev + 1;
         });
-      }, 1500);
+      }, 1600);
     } else if (playTimerRef.current) {
       clearInterval(playTimerRef.current);
     }
@@ -191,93 +194,184 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
   const badgeStyle = getBadgeStyle(depth);
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden">
-      {/* Top Banner with current step overview */}
-      <div className="p-4 sm:p-6 border-b border-slate-100 bg-gradient-to-r from-slate-50 via-white to-slate-50">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <section className="bg-white rounded-3xl shadow-sm border border-slate-200/80 overflow-hidden space-y-0">
+      {/* 1. Studio Top Banner: Step & Level Info */}
+      <div className="p-5 sm:p-7 border-b border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span
-                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold text-white ${themeColors.badgeBg}`}
-              >
-                {level === 'elementary' ? currentExplanation.elementary.badge : `깊이 n = ${depth}`}
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-2xl">📐</span>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-black text-white ${themeColors.badgeBg}`}>
+                {level === 'elementary' ? currentExplanation.elementary.badge : `단계 n = ${depth} (0~6단계)`}
               </span>
-              <h2 className="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">
-                {level === 'elementary'
-                  ? currentExplanation.elementary.title
-                  : currentExplanation.middle.title}
-              </h2>
+              <h3 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
+                시어핀스키 삼각형 인터랙티브 스튜디오
+              </h3>
             </div>
             <p className="text-xs sm:text-sm text-slate-600">
               {level === 'elementary'
-                ? currentExplanation.elementary.subTitle
-                : currentExplanation.middle.subTitle}
+                ? '가운데 역삼각형을 쏙 빼낼 때마다 일어나는 마법 같은 변화를 관찰해보세요!'
+                : '거듭제곱(3의 n제곱)과 규칙성으로 탐구하는 시어핀스키 기하학 스튜디오'}
             </p>
           </div>
 
-          {/* Quick Stats Pills with LaTeX representation */}
-          <div className="flex items-center flex-wrap gap-2 text-xs">
-            <div className="px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-700 flex items-center gap-1.5">
-              <span className="text-slate-500 font-medium">남은 삼각형:</span>
-              {level === 'elementary' ? (
-                <span className="font-bold text-slate-900 font-mono text-sm">
-                  {Math.pow(3, depth)}개
-                </span>
-              ) : (
-                <span className="font-bold text-slate-900 inline-flex items-center">
-                  <MathView math={currentExplanation.middle.triangleCountFormulaLatex || '3^n'} />
-                  <span className="ml-1 text-slate-500 font-normal">
-                    (= {Math.pow(3, depth)}개)
-                  </span>
-                </span>
-              )}
+          {/* Quick step tag */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-500">현재 상태:</span>
+            <span className="px-3 py-1.5 rounded-xl bg-slate-900 text-white font-mono font-bold text-xs">
+              {depth}단계 (0 ~ 6단계)
+            </span>
+          </div>
+        </div>
+
+        {/* 2. Key 3 Information Cards: Count, Perimeter, Area */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 mt-5">
+          {/* Card 1: Triangle Count */}
+          <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 shadow-2xs space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700 flex items-center gap-1.5">
+                <TrendingUp className="w-4 h-4 text-indigo-600" />
+                <span>삼각형의 개수</span>
+              </span>
+              <span className="text-[11px] font-semibold text-indigo-600 bg-white/80 px-2 py-0.5 rounded-md border border-indigo-100">
+                {level === 'elementary' ? '매 단계 3배씩 증가' : '3의 n제곱'}
+              </span>
             </div>
 
-            {level === 'middle' ? (
-              <>
-                <div className="px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-800 flex items-center gap-1.5">
-                  <span className="text-indigo-600 font-medium">남은 면적:</span>
-                  <MathView math={currentExplanation.middle.areaFormulaLatex || '\\left(\\frac{3}{4}\\right)^n'} />
-                  <span className="text-[11px] text-indigo-500 font-normal">
-                    ({currentExplanation.middle.areaValPercent})
-                  </span>
+            <div className="pt-1">
+              {level === 'elementary' ? (
+                /* Elementary: NO exponents used! Explicit counts */
+                <div>
+                  <div className="text-2xl font-black text-indigo-950 font-mono tracking-tight">
+                    {currentExplanation.elementary.triangleCountText}
+                  </div>
+                  <p className="text-xs text-indigo-800 mt-1">
+                    남은 삼각형이 계속 <strong>3배씩</strong> 늘어나요!
+                  </p>
                 </div>
+              ) : (
+                /* Middle: Uses Powers / Exponents */
+                <div>
+                  <div className="text-xl sm:text-2xl font-black text-indigo-950 flex items-center gap-2">
+                    <MathView math={currentExplanation.middle.triangleCountFormulaLatex || '3^n'} />
+                    <span className="text-xs font-normal text-indigo-600 font-mono">
+                      (= {Math.pow(3, depth)}개)
+                    </span>
+                  </div>
+                  <p className="text-xs text-indigo-800 mt-1">
+                    규칙: <span>n단계에서 삼각형의 개수는 </span>
+                    <MathView math="3^n" />
+                    <span> (3의 n제곱)</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
 
-                <div className="px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 flex items-center gap-1.5">
-                  <span className="text-amber-700 font-medium">전체 둘레:</span>
-                  <MathView math={currentExplanation.middle.perimeterFormulaLatex || '3 \\times \\left(\\frac{3}{2}\\right)^n'} />
+          {/* Card 2: Triangle Perimeter */}
+          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 shadow-2xs space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-800 flex items-center gap-1.5">
+                <Ruler className="w-4 h-4 text-amber-600" />
+                <span>삼각형의 둘레</span>
+              </span>
+              <span className="text-[11px] font-semibold text-amber-700 bg-white/80 px-2 py-0.5 rounded-md border border-amber-100">
+                {level === 'elementary' ? '테두리가 계속 길어짐' : '3 × (3/2)ⁿ 거듭제곱'}
+              </span>
+            </div>
+
+            <div className="pt-1">
+              {level === 'elementary' ? (
+                /* Elementary: NO exponents used! Ratios & multiples */
+                <div>
+                  <div className="text-2xl font-black text-amber-950 font-mono tracking-tight">
+                    {currentExplanation.elementary.perimeterText}
+                  </div>
+                  <p className="text-xs text-amber-800 mt-1">
+                    가운데 구멍 테두리가 더해져 <strong>1.5배씩 길어져요!</strong>
+                  </p>
                 </div>
-              </>
-            ) : (
-              <div className="px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 font-medium flex items-center gap-1">
-                <span>{currentExplanation.elementary.analogy}</span>
-              </div>
-            )}
+              ) : (
+                /* Middle: Uses Powers / Exponents */
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-amber-950 flex items-center gap-1.5">
+                    <MathView math={currentExplanation.middle.perimeterFormulaLatex || '3 \\times \\left(\\frac{3}{2}\\right)^n'} />
+                  </div>
+                  <p className="text-xs text-amber-800 mt-1">
+                    규칙: <span>n단계에서 삼각형의 둘레는 </span>
+                    <MathView math="3 \times \left(\frac{3}{2}\right)^n" />
+                    <span> (3 × 3/2의 n제곱)</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Card 3: Triangle Area */}
+          <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 shadow-2xs space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-800 flex items-center gap-1.5">
+                <Square className="w-4 h-4 text-emerald-600" />
+                <span>삼각형의 넓이</span>
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-white/80 px-2 py-0.5 rounded-md border border-emerald-100">
+                {level === 'elementary' ? '구멍이 뚫려 0에 가까워짐' : '(3/4)ⁿ 거듭제곱'}
+              </span>
+            </div>
+
+            <div className="pt-1">
+              {level === 'elementary' ? (
+                /* Elementary: NO exponents used! Fractions & Percentages */
+                <div>
+                  <div className="text-2xl font-black text-emerald-950 font-mono tracking-tight">
+                    {currentExplanation.elementary.areaText}
+                  </div>
+                  <p className="text-xs text-emerald-800 mt-1">
+                    4조각 중 1조각을 빼내어 <strong>4분의 3씩 줄어들어요!</strong>
+                  </p>
+                </div>
+              ) : (
+                /* Middle: Uses Powers / Exponents */
+                <div>
+                  <div className="text-lg sm:text-xl font-black text-emerald-950 flex items-center gap-2">
+                    <MathView math={currentExplanation.middle.areaFormulaLatex || '\\left(\\frac{3}{4}\\right)^n'} />
+                    <span className="text-xs font-semibold text-emerald-700">
+                      ({currentExplanation.middle.areaValPercent})
+                    </span>
+                  </div>
+                  <p className="text-xs text-emerald-800 mt-1">
+                    규칙: <span>n단계에서 삼각형의 넓이는 </span>
+                    <MathView math="\left(\frac{3}{4}\right)^n" />
+                    <span> (3/4의 n제곱)</span>
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main Canvas & Controls Section */}
+      {/* 3. Main Studio Grid: Large Canvas (8 cols) + Controls (4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-        {/* Left Side: Interactive SVG Canvas (8 cols on lg) */}
+        {/* Large Canvas Viewport */}
         <div
           ref={containerRef}
-          className="lg:col-span-8 p-4 sm:p-6 flex flex-col items-center justify-center bg-slate-900 relative min-h-[440px] sm:min-h-[520px] select-none overflow-hidden"
+          className="lg:col-span-8 p-4 sm:p-8 flex flex-col items-center justify-center bg-slate-900 relative min-h-[480px] sm:min-h-[560px] select-none overflow-hidden"
         >
-          {/* Canvas Floating Tools: Modes & Elementary Numbering */}
+          {/* Floating Canvas Controls */}
           <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-2">
-            {/* View Mode */}
-            <div className="bg-slate-800/90 backdrop-blur-md rounded-lg p-1 border border-slate-700 flex items-center gap-1">
+            {/* View Mode Buttons */}
+            <div className="bg-slate-800/90 backdrop-blur-md rounded-xl p-1 border border-slate-700 flex items-center gap-1 shadow-md">
               <button
                 type="button"
                 id="btn-mode-solid"
                 onClick={() => setViewMode('solid')}
-                className={`px-2.5 py-1 text-xs rounded font-medium transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs rounded-lg font-bold transition-colors cursor-pointer ${
                   viewMode === 'solid'
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'text-slate-300 hover:text-white'
                 }`}
-                title="채우기 모드"
+                title="남은 정삼각형 채우기"
               >
                 도형 채우기
               </button>
@@ -285,12 +379,12 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                 type="button"
                 id="btn-mode-holes"
                 onClick={() => setViewMode('holes')}
-                className={`px-2.5 py-1 text-xs rounded font-medium transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs rounded-lg font-bold transition-colors cursor-pointer ${
                   viewMode === 'holes'
                     ? 'bg-rose-600 text-white shadow-xs'
                     : 'text-slate-300 hover:text-white'
                 }`}
-                title="잘라낸 구멍 강조 모드"
+                title="잘라낸 구멍 강조"
               >
                 잘라낸 구멍 보기
               </button>
@@ -298,216 +392,195 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                 type="button"
                 id="btn-mode-outline"
                 onClick={() => setViewMode('outline')}
-                className={`px-2.5 py-1 text-xs rounded font-medium transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs rounded-lg font-bold transition-colors cursor-pointer ${
                   viewMode === 'outline'
-                    ? 'bg-sky-600 text-white shadow-xs'
+                    ? 'bg-slate-700 text-white shadow-xs'
                     : 'text-slate-300 hover:text-white'
                 }`}
-                title="외곽선 모드"
+                title="외곽선만 보기"
               >
                 외곽선
               </button>
             </div>
 
-            {/* Elementary Triangle Numbering Toggle (User Requirement 6) */}
-            {level === 'elementary' && (
+            {/* Elementary Number Toggle */}
+            {level === 'elementary' && depth <= 4 && (
               <button
                 type="button"
                 id="btn-toggle-numbers"
                 onClick={() => setShowNumbers(!showNumbers)}
-                className={`px-2.5 py-1 text-xs rounded-lg font-bold border flex items-center gap-1.5 transition-colors cursor-pointer ${
+                className={`px-3 py-1.5 text-xs rounded-xl font-bold border transition-colors flex items-center gap-1.5 shadow-md cursor-pointer ${
                   showNumbers
-                    ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-sm'
+                    ? 'bg-amber-400 text-slate-950 border-amber-300'
                     : 'bg-slate-800/90 text-slate-300 border-slate-700 hover:text-white'
                 }`}
-                title="남아있는 삼각형에 1, 2, 3... 번호를 표시하여 쉽게 개수를 셀 수 있어요"
+                title="남은 삼각형에 번호표(1, 2, 3...) 붙이기"
               >
                 <Hash className="w-3.5 h-3.5" />
-                <span>{showNumbers ? '숫자 번호표 켜짐 (1, 2, 3...)' : '삼각형 번호표 보기'}</span>
+                <span>번호표 {showNumbers ? 'ON' : 'OFF'}</span>
               </button>
             )}
           </div>
 
           {/* Zoom Controls */}
-          <div className="absolute top-4 right-4 z-10 flex items-center gap-1 bg-slate-800/90 backdrop-blur-md rounded-lg p-1 border border-slate-700 text-slate-200">
+          <div className="absolute top-4 right-4 z-10 flex items-center gap-1 bg-slate-800/90 backdrop-blur-md rounded-xl p-1 border border-slate-700 shadow-md">
             <button
               type="button"
-              onClick={() => setZoom((z) => Math.max(0.7, z - 0.15))}
-              className="p-1.5 rounded hover:bg-slate-700 transition-colors cursor-pointer"
+              onClick={() => setZoom((z) => Math.max(0.8, Number((z - 0.2).toFixed(1))))}
+              className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-colors cursor-pointer"
               title="축소"
-              aria-label="축소"
             >
-              <ZoomOut className="w-3.5 h-3.5" />
+              <ZoomOut className="w-4 h-4" />
             </button>
-            <span className="text-xs font-mono px-1 font-medium text-slate-300">
+            <span className="text-[11px] font-mono text-slate-300 px-1 font-bold">
               {Math.round(zoom * 100)}%
             </span>
             <button
               type="button"
-              onClick={() => setZoom((z) => Math.min(2.2, z + 0.15))}
-              className="p-1.5 rounded hover:bg-slate-700 transition-colors cursor-pointer"
+              onClick={() => setZoom((z) => Math.min(2.0, Number((z + 0.2).toFixed(1))))}
+              className="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-700 transition-colors cursor-pointer"
               title="확대"
-              aria-label="확대"
             >
-              <ZoomIn className="w-3.5 h-3.5" />
+              <ZoomIn className="w-4 h-4" />
             </button>
-            <button
-              type="button"
-              onClick={() => setZoom(1)}
-              className="text-[10px] px-1.5 py-0.5 rounded hover:bg-slate-700 text-slate-400 cursor-pointer"
-              title="기본 크기로 리셋"
-            >
-              리셋
-            </button>
+            {zoom !== 1 && (
+              <button
+                type="button"
+                onClick={() => setZoom(1)}
+                className="text-[10px] text-amber-400 hover:underline px-1"
+              >
+                초기화
+              </button>
+            )}
           </div>
 
-          {/* SVG Canvas */}
+          {/* SVG Canvas Element */}
           <div
-            className="w-full flex items-center justify-center transition-transform duration-200"
+            className="w-full flex items-center justify-center transition-transform duration-300 ease-out"
             style={{ transform: `scale(${zoom})` }}
           >
             <svg
               viewBox={`0 0 ${width} ${height}`}
-              className="w-full max-w-[500px] h-auto drop-shadow-2xl overflow-visible"
-              style={{ filter: 'drop-shadow(0 15px 25px rgba(0,0,0,0.5))' }}
+              className="w-full max-w-[620px] max-h-[520px] drop-shadow-2xl"
             >
               <defs>
-                <linearGradient id="triGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor={themeColors.primaryLight} />
-                  <stop offset="100%" stopColor={themeColors.primary} />
-                </linearGradient>
-
-                <linearGradient id="holeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#f87171" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity="0.9" />
-                </linearGradient>
+                <filter id="canvas-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
               </defs>
 
-              {/* Background Base Triangle (Dark Guide) */}
-              <polygon
-                points={`${rootP1.x},${rootP1.y} ${rootP2.x},${rootP2.y} ${rootP3.x},${rootP3.y}`}
-                fill="#1e293b"
-                stroke="#334155"
-                strokeWidth="2"
-              />
+              {/* Inverted Holes Layer */}
+              {viewMode === 'holes' &&
+                holes.map((hole) => (
+                  <polygon
+                    key={hole.id}
+                    points={`${hole.p1.x},${hole.p1.y} ${hole.p2.x},${hole.p2.y} ${hole.p3.x},${hole.p3.y}`}
+                    fill="rgba(244, 63, 94, 0.45)"
+                    stroke="#f43f5e"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 3"
+                  />
+                ))}
 
-              {/* Rendered Remaining Triangles */}
-              <g id="sierpinski-triangles">
-                {triangles.map((tri, triIdx) => {
-                  const isHovered = hoveredTriangle?.id === tri.id;
+              {/* Main Sierpinski Triangles */}
+              {triangles.map((tri, index) => {
+                const points = `${tri.p1.x},${tri.p1.y} ${tri.p2.x},${tri.p2.y} ${tri.p3.x},${tri.p3.y}`;
+                const centroid = {
+                  x: (tri.p1.x + tri.p2.x + tri.p3.x) / 3,
+                  y: (tri.p1.y + tri.p2.y + tri.p3.y) / 3,
+                };
+                const isHovered = hoveredTriangle?.id === tri.id;
 
-                  // Centroid calculation for elementary numbering
-                  const cx = (tri.p1.x + tri.p2.x + tri.p3.x) / 3;
-                  const cy = (tri.p1.y + tri.p2.y + tri.p3.y) / 3;
-
-                  return (
-                    <g key={tri.id}>
-                      <polygon
-                        id={`tri-${tri.id}`}
-                        points={`${tri.p1.x},${tri.p1.y} ${tri.p2.x},${tri.p2.y} ${tri.p3.x},${tri.p3.y}`}
-                        fill={viewMode === 'outline' ? 'transparent' : 'url(#triGrad)'}
-                        stroke={
-                          isHovered
-                            ? '#fbbf24'
-                            : viewMode === 'outline'
-                            ? themeColors.primaryLight
-                            : '#0f172a'
-                        }
-                        strokeWidth={
-                          viewMode === 'outline'
-                            ? depth > 4
-                              ? 0.75
-                              : 1.5
-                            : depth > 4
-                            ? 0.2
-                            : 0.6
-                        }
-                        className="transition-all duration-300"
-                        onMouseEnter={() => setHoveredTriangle(tri)}
-                        onMouseLeave={() => setHoveredTriangle(null)}
-                      />
-
-                      {/* Requirement 6: Elementary Triangle Numbering in Center */}
-                      {level === 'elementary' && showNumbers && depth <= 4 && (
-                        <g className="pointer-events-none select-none">
-                          <circle
-                            cx={cx}
-                            cy={cy}
-                            r={badgeStyle.radius}
-                            fill="#ffffff"
-                            stroke="#0f172a"
-                            strokeWidth={badgeStyle.strokeW}
-                            opacity={0.92}
-                          />
-                          <text
-                            x={cx}
-                            y={cy}
-                            textAnchor="middle"
-                            dominantBaseline="central"
-                            fill="#0f172a"
-                            fontSize={badgeStyle.fontSize}
-                            fontWeight="900"
-                            fontFamily="Noto Sans KR, sans-serif"
-                          >
-                            {triIdx + 1}
-                          </text>
-                        </g>
-                      )}
-                    </g>
-                  );
-                })}
-              </g>
-
-              {/* Removed Hole Highlight Mode */}
-              {viewMode === 'holes' && (
-                <g id="removed-holes" className="animate-fadeIn">
-                  {holes.map((hole) => (
+                return (
+                  <g
+                    key={tri.id}
+                    onMouseEnter={() => setHoveredTriangle(tri)}
+                    onMouseLeave={() => setHoveredTriangle(null)}
+                    className="cursor-pointer group"
+                  >
                     <polygon
-                      key={hole.id}
-                      points={`${hole.p1.x},${hole.p1.y} ${hole.p2.x},${hole.p2.y} ${hole.p3.x},${hole.p3.y}`}
-                      fill="url(#holeGrad)"
-                      stroke="#fecaca"
-                      strokeWidth={depth > 4 ? 0.3 : 1}
-                      fillOpacity={0.85}
+                      points={points}
+                      fill={
+                        viewMode === 'outline'
+                          ? 'none'
+                          : isHovered
+                          ? themeColors.primaryLight
+                          : themeColors.fill
+                      }
+                      stroke={
+                        viewMode === 'outline'
+                          ? themeColors.primaryLight
+                          : '#0f172a'
+                      }
+                      strokeWidth={
+                        depth >= 5 ? 0.4 : depth >= 3 ? 0.8 : 1.5
+                      }
+                      className="transition-colors duration-200"
                     />
-                  ))}
-                </g>
-              )}
+
+                    {/* Elementary Mode: Triangle Number Badge */}
+                    {level === 'elementary' && showNumbers && depth <= 4 && (
+                      <g>
+                        <circle
+                          cx={centroid.x}
+                          cy={centroid.y}
+                          r={badgeStyle.radius}
+                          fill="#fef08a"
+                          stroke="#854d0e"
+                          strokeWidth={badgeStyle.strokeW}
+                        />
+                        <text
+                          x={centroid.x}
+                          y={centroid.y + badgeStyle.fontSize * 0.35}
+                          textAnchor="middle"
+                          fontSize={badgeStyle.fontSize}
+                          fontWeight="900"
+                          fill="#713f12"
+                          fontFamily="sans-serif"
+                        >
+                          {index + 1}
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
             </svg>
           </div>
 
-          {/* Bottom Canvas Overlay Message */}
+          {/* Bottom helper text inside canvas */}
           <div className="absolute bottom-3 text-center text-xs text-slate-400">
             {level === 'elementary' ? (
               <span className="text-amber-300 font-medium">
                 {showNumbers && depth <= 4
-                  ? `남은 삼각형 중앙의 번호(총 ${Math.pow(3, depth)}개)를 세어보세요!`
-                  : '작은 삼각형들이 끝없이 3배씩 늘어나는 자기닮음의 마법'}
+                  ? `남은 삼각형 번호표(총 ${Math.pow(3, depth)}개)를 하나씩 확인해보세요!`
+                  : `현재 ${depth}단계: 총 ${Math.pow(3, depth)}개의 예쁜 삼각형이 남아있어요.`}
               </span>
             ) : (
               <span className="flex items-center justify-center gap-3">
                 <span>프랙탈 차원 <MathView math="D = \frac{\ln 3}{\ln 2} \approx 1.585" /></span>
                 <span>|</span>
-                <span>남은 개수 <MathView math={`3^{${depth}} = ${Math.pow(3, depth)}`} /></span>
+                <span>남은 개수 <MathView math={`3^{${depth}} = ${Math.pow(3, depth)}`} />개</span>
               </span>
             )}
           </div>
         </div>
 
-        {/* Right Side: Step Controls & Math Inspector (4 cols on lg) */}
-        <div className="lg:col-span-4 p-5 sm:p-6 bg-slate-50/70 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-200">
-          <div>
-            {/* Depth Slider & Step Controllers */}
-            <div className="mb-6">
+        {/* Right Side: Step Controls & Educational Guide */}
+        <div className="lg:col-span-4 p-5 sm:p-7 bg-slate-50/70 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-200 space-y-6">
+          <div className="space-y-6">
+            {/* Step Slider (0 ~ 6) */}
+            <div>
               <div className="flex items-center justify-between mb-2">
                 <label
                   htmlFor="depth-slider"
-                  className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5"
+                  className="text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5"
                 >
-                  <Layers className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>도형 깊이 (단계: {depth})</span>
+                  <Layers className="w-4 h-4 text-indigo-600" />
+                  <span>단계 조절 (0단계 ~ 6단계)</span>
                 </label>
-                <span className="text-xs font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200">
+                <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-indigo-600 text-white shadow-2xs">
                   {depth} 단계
                 </span>
               </div>
@@ -524,11 +597,11 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                   setDepth(Number(e.target.value));
                   setIsPlaying(false);
                 }}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                className="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
               />
 
-              {/* Step indicator marks */}
-              <div className="flex justify-between text-[11px] text-slate-500 font-semibold px-0.5 mt-1.5">
+              {/* Quick Step Buttons (0 ~ 6) */}
+              <div className="grid grid-cols-7 gap-1 mt-2.5">
                 {[0, 1, 2, 3, 4, 5, 6].map((st) => (
                   <button
                     key={st}
@@ -537,8 +610,10 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                       setDepth(st);
                       setIsPlaying(false);
                     }}
-                    className={`hover:text-indigo-600 transition-colors cursor-pointer ${
-                      depth === st ? 'text-indigo-600 font-bold' : ''
+                    className={`py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                      depth === st
+                        ? 'bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-400/40'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     {st}
@@ -547,8 +622,8 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
               </div>
             </div>
 
-            {/* Playback Controls (Play / Step Back / Step Forward / Reset) */}
-            <div className="grid grid-cols-4 gap-2 mb-6">
+            {/* Playback Controls (Play / Prev / Next / Reset) */}
+            <div className="grid grid-cols-4 gap-2">
               <button
                 type="button"
                 id="btn-step-prev"
@@ -557,7 +632,7 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                   setIsPlaying(false);
                 }}
                 disabled={depth <= 0}
-                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium text-xs hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
                 title="이전 단계"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -568,7 +643,7 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                 type="button"
                 id="btn-play-pause"
                 onClick={() => setIsPlaying(!isPlaying)}
-                className={`py-2.5 px-2 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer ${
+                className={`py-2.5 px-2 rounded-xl font-black text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer ${
                   isPlaying
                     ? 'bg-amber-500 hover:bg-amber-600 text-slate-950'
                     : 'bg-indigo-600 hover:bg-indigo-700 text-white'
@@ -596,7 +671,7 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                   setIsPlaying(false);
                 }}
                 disabled={depth >= 6}
-                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium text-xs hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
                 title="다음 단계"
               >
                 <span>다음</span>
@@ -610,8 +685,8 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                   setDepth(0);
                   setIsPlaying(false);
                 }}
-                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-medium text-xs hover:bg-slate-100 flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
-                title="처음으로 리셋"
+                className="py-2.5 px-2 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 flex items-center justify-center gap-1 shadow-2xs cursor-pointer"
+                title="0단계로 돌아가기"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>리셋</span>
@@ -619,56 +694,58 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
             </div>
 
             {/* Color Theme Selector */}
-            <div className="mb-6 pb-6 border-b border-slate-200">
+            <div className="pb-4 border-b border-slate-200">
               <label className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Palette className="w-3.5 h-3.5 text-slate-500" />
-                <span>테마 색상</span>
+                <span>테마 색상 변경</span>
               </label>
-              <div className="flex items-center gap-2">
+              <div className="grid grid-cols-4 gap-1.5">
                 {[
                   { id: 'indigo', label: '인디고', bg: 'bg-indigo-600' },
                   { id: 'emerald', label: '에메랄드', bg: 'bg-emerald-600' },
-                  { id: 'sunset', label: '선셋 코랄', bg: 'bg-rose-500' },
+                  { id: 'sunset', label: '선셋', bg: 'bg-rose-500' },
                   { id: 'violet', label: '바이올렛', bg: 'bg-violet-600' },
                 ].map((th) => (
                   <button
                     key={th.id}
                     type="button"
                     onClick={() => setColorTheme(th.id as ColorTheme)}
-                    className={`flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
+                    className={`py-1.5 px-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 border transition-all cursor-pointer ${
                       colorTheme === th.id
                         ? 'border-slate-800 bg-white text-slate-900 shadow-xs ring-2 ring-slate-800/10'
                         : 'border-slate-200 bg-white/70 text-slate-600 hover:bg-white'
                     }`}
                   >
                     <span className={`w-2.5 h-2.5 rounded-full ${th.bg}`} />
-                    <span className="hidden sm:inline">{th.label}</span>
+                    <span>{th.label}</span>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Detailed Educational Breakdown according to Level */}
-            <div className="space-y-3">
+            {/* Educational Discovery Note */}
+            <div>
               {level === 'elementary' ? (
-                <div className="bg-amber-50/80 rounded-xl p-4 border border-amber-200/80 text-amber-950">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800 mb-1.5">
+                /* Elementary Mode: Pure friendly analogy, NO exponents! */
+                <div className="bg-amber-50 rounded-2xl p-4 sm:p-5 border border-amber-200 text-amber-950 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs font-black text-amber-800">
                     <Sparkles className="w-4 h-4 text-amber-600" />
-                    <span>초등학생 눈높이 발견 노트</span>
+                    <span>초등학생 눈높이 발견 노트 ({depth}단계)</span>
                   </div>
                   <p className="text-xs sm:text-sm leading-relaxed text-amber-900">
                     {currentExplanation.elementary.description}
                   </p>
-                  <div className="mt-3 pt-2.5 border-t border-amber-200 text-xs font-medium text-amber-800 flex items-center justify-between">
-                    <span>💡 규칙:</span>
-                    <span className="font-bold">언제나 이전 삼각형 수 × 3배!</span>
+                  <div className="pt-2 border-t border-amber-200 text-xs font-semibold text-amber-800 flex items-center justify-between">
+                    <span>💡 발견한 규칙:</span>
+                    <span className="font-bold">이전 개수 × 3배! (1 ➔ 3 ➔ 9 ➔ 27...)</span>
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs space-y-2.5">
-                  <div className="flex items-center justify-between text-xs font-bold text-indigo-700">
+                /* Middle School Mode: Mathematical Formulas & Insights */
+                <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-2xs space-y-3">
+                  <div className="flex items-center justify-between text-xs font-black text-indigo-700">
                     <span className="flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5" />
+                      <Info className="w-4 h-4" />
                       <span>중학생 수학 공식 분석 ({depth}단계)</span>
                     </span>
                     <span className="font-mono bg-indigo-50 px-2 py-0.5 rounded text-indigo-800">
@@ -676,49 +753,28 @@ export const SierpinskiCanvas: React.FC<SierpinskiCanvasProps> = ({
                     </span>
                   </div>
 
-                  {/* Requirement 2: Fractions and Formulas represented in textbook LaTeX */}
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                      <div className="text-slate-500 font-medium text-[11px] mb-1">삼각형 개수</div>
-                      <div className="font-bold text-indigo-700 flex items-center">
-                        <MathView math={currentExplanation.middle.triangleCountFormulaLatex || '3^n'} />
-                      </div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                      <div className="text-slate-500 font-medium text-[11px] mb-1">한 변의 길이</div>
-                      <div className="font-bold text-slate-800 flex items-center">
-                        <MathView math={currentExplanation.middle.sideLengthFormulaLatex || '\\left(\\frac{1}{2}\\right)^n'} />
-                      </div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                      <div className="text-slate-500 font-medium text-[11px] mb-1">남은 면적 비율</div>
-                      <div className="font-bold text-emerald-700 flex items-center">
-                        <MathView math={currentExplanation.middle.areaFormulaLatex || '\\left(\\frac{3}{4}\\right)^n'} />
-                      </div>
-                    </div>
-                    <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                      <div className="text-slate-500 font-medium text-[11px] mb-1">전체 둘레 길이</div>
-                      <div className="font-bold text-amber-800 flex items-center">
-                        <MathView math={currentExplanation.middle.perimeterFormulaLatex || '3 \\times \\left(\\frac{3}{2}\\right)^n'} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-slate-600 bg-indigo-50/50 p-2.5 rounded-lg border border-indigo-100 leading-relaxed">
-                    <strong>수학적 원리:</strong> {currentExplanation.middle.mathInsight}
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    {currentExplanation.middle.description}
                   </p>
+
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+                    <span className="font-bold text-slate-900 block">수학적 원리 Insight:</span>
+                    <span className="text-slate-600 leading-relaxed block text-[11px]">
+                      {currentExplanation.middle.mathInsight}
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Quick Tip Footer */}
-          <div className="mt-4 pt-3 border-t border-slate-200/60 text-[11px] text-slate-600 flex items-center justify-between">
-            <span>폴란드 수학자 바츠와프 시어핀스키(1915년)</span>
-            <span className="text-indigo-600 font-medium">Sierpiński Triangle</span>
+          {/* Footer note */}
+          <div className="pt-3 border-t border-slate-200 text-[11px] text-slate-500 flex items-center justify-between">
+            <span>바츠와프 시어핀스키 (1915)</span>
+            <span className="text-indigo-600 font-semibold">0단계 ~ 6단계 탐구</span>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

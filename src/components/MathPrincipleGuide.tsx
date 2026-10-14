@@ -82,7 +82,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             {level === 'elementary'
               ? '가운데 구멍을 뚫을 때마다 어떤 놀라운 규칙이 생기는지 함께 관찰해 볼까요?'
-              : '밑이 3인 거듭제곱 수열, 극한(Limit), 그리고 프랙탈 차원의 비밀을 분석합니다.'}
+              : '거듭제곱(3의 n제곱) 수식과 규칙성, 그리고 프랙탈 차원의 비밀을 분석합니다.'}
           </p>
         </div>
 
@@ -301,7 +301,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                 </span>
               </div>
               <h4 className="text-base font-bold text-slate-900 mb-2">
-                남은 정삼각형 개수는 밑이 3인 등비수열
+                남은 정삼각형 개수는 3의 n제곱
               </h4>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
                 매 단계마다 1개의 정삼각형이 3개의 작은 삼각형으로 쪼개집니다. 따라서 n단계에서의 삼각형 개수는 3을 n번 곱한 <MathView math="3^n" />이 됩니다.
@@ -322,7 +322,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                   길이의 거듭제곱
                 </span>
                 <span className="text-base text-sky-700">
-                  <MathView math="L_n = \left(\frac{1}{2}\right)^n = 2^{-n}" />
+                  <MathView math="L_n = \left(\frac{1}{2}\right)^n" />
                 </span>
               </div>
               <h4 className="text-base font-bold text-slate-900 mb-2">
@@ -340,56 +340,56 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
               </div>
             </div>
 
-            {/* 3. 면적의 거듭제곱과 극한: (3/4)^n -> 0 */}
+            {/* 3. 면적의 거듭제곱: (3/4)^n -> 0 */}
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 hover:border-emerald-300 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
-                  면적의 극한 (Limit)
+                  면적의 거듭제곱
                 </span>
                 <span className="text-base text-emerald-700">
-                  <MathView math="A_n = \left(\frac{3}{4}\right)^n \to 0" />
+                  <MathView math="A_n = \left(\frac{3}{4}\right)^n" />
                 </span>
               </div>
               <h4 className="text-base font-bold text-slate-900 mb-2">
-                면적은 매번 1/4씩 빠져나가 결국 0에 수렴!
+                면적은 매번 1/4씩 빠져나가 점점 0에 가까워짐!
               </h4>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
                 합동인 4개의 삼각형 중 가운데 1개를 버리므로 남은 면적 비율은 <MathView math="\frac{3}{4}" />입니다.
-                밑인 <MathView math="\frac{3}{4} < 1" />이므로 무한히 반복하면 남은 넓이는 <strong>0</strong>이 됩니다!
+                밑인 <MathView math="\frac{3}{4} < 1" />이므로 단계를 거듭할수록 남은 넓이는 <strong>0에 가까워집니다</strong>!
               </p>
               <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
                 <div className="font-medium text-emerald-700">
-                  <MathView math="\lim_{n \to \infty} \left(\frac{3}{4}\right)^n = 0" />
+                  n단계 넓이: <MathView math="\left(\frac{3}{4}\right)^n" />
                 </div>
                 <div className="text-slate-600">
-                  "도형 전체의 넓이가 사실상 0이 되어 사라집니다."
+                  "단계를 계속 반복할수록 전체 넓이가 점점 0에 가까워집니다."
                 </div>
               </div>
             </div>
 
-            {/* 4. 둘레의 거듭제곱과 발산: (3/2)^n -> 무한대 */}
+            {/* 4. 둘레의 거듭제곱: 3 * (3/2)^n */}
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/80 hover:border-amber-300 transition-colors">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">
-                  둘레의 발산 (Divergence)
+                  둘레의 거듭제곱
                 </span>
                 <span className="text-base text-amber-700">
-                  <MathView math="P_n = 3 \times \left(\frac{3}{2}\right)^n \to \infty" />
+                  <MathView math="P_n = 3 \times \left(\frac{3}{2}\right)^n" />
                 </span>
               </div>
               <h4 className="text-base font-bold text-slate-900 mb-2">
-                안쪽 구멍 테두리가 생기며 둘레는 무한대로 폭발!
+                안쪽 구멍 테두리가 생기며 둘레는 끝없이 길어짐!
               </h4>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-3">
                 둘레는 (개수 <MathView math="3^n" />) × (길이 <MathView math="\left(\frac{1}{2}\right)^n" />) × 3 = <MathView math="3 \times \left(\frac{3}{2}\right)^n" /> 입니다.
-                밑인 <MathView math="\frac{3}{2} = 1.5 > 1" />이므로 n이 커질수록 <strong>무한대(∞)</strong>로 길어집니다!
+                밑인 <MathView math="\frac{3}{2} = 1.5 > 1" />이므로 n이 커질수록 <strong>끝없이</strong> 길어집니다!
               </p>
               <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-1">
                 <div className="font-medium text-amber-700">
-                  <MathView math="\lim_{n \to \infty} 3 \times \left(\frac{3}{2}\right)^n = \infty" />
+                  n단계 둘레: <MathView math="3 \times \left(\frac{3}{2}\right)^n" />
                 </div>
                 <div className="text-slate-600">
-                  "넓이는 0인데 둘레는 무한대인 프랙탈의 역설!"
+                  "넓이는 0에 가까워지는데 둘레는 끝없이 길어지는 프랙탈의 신비!"
                 </div>
               </div>
             </div>
@@ -441,7 +441,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
             </div>
 
             <p className="text-xs text-indigo-200 mt-4 leading-relaxed">
-              💡 선(1차원)보다는 복잡해서 둘레가 무한대이지만, 면(2차원)보다는 구멍이 많아서 넓이가 0입니다. 그래서 1과 2 사이의 분수(소수) 차원인 <strong>1.585차원</strong>을 가집니다!
+              💡 선(1차원)보다는 복잡해서 둘레가 끝없이 길어지지만, 면(2차원)보다는 구멍이 많아서 넓이가 점점 0에 가까워집니다. 그래서 1과 2 사이의 분수(소수) 차원인 <strong>1.585차원</strong>을 가집니다!
             </p>
           </div>
 
@@ -478,7 +478,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                     <th className="py-2.5 px-3">항목</th>
                     <th className="py-2.5 px-3">수학 공식</th>
                     <th className="py-2.5 px-3">n = {calcN} 대입 값</th>
-                    <th className="py-2.5 px-3">극한 경향 (n → ∞)</th>
+                    <th className="py-2.5 px-3">단계가 커질 때의 규칙</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -488,7 +488,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                     <td className="py-2.5 px-3 font-bold text-indigo-700">
                       <MathView math={`3^{${calcN}} = ${Math.pow(3, calcN).toLocaleString()}`} /> 개
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">무한대 발산 (∞)</td>
+                    <td className="py-2.5 px-3 text-slate-600">3의 n제곱으로 급증</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 px-3 font-medium text-slate-800">한 변의 길이</td>
@@ -496,7 +496,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                     <td className="py-2.5 px-3 font-bold text-sky-700">
                       <MathView math={`\\frac{1}{${Math.pow(2, calcN).toLocaleString()}}`} /> ({(Math.pow(0.5, calcN)).toFixed(5)})
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">0으로 수렴</td>
+                    <td className="py-2.5 px-3 text-slate-600">점점 0에 가까워짐</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 px-3 font-medium text-slate-800">전체 면적 비율</td>
@@ -504,7 +504,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                     <td className="py-2.5 px-3 font-bold text-emerald-700">
                       {(Math.pow(0.75, calcN) * 100).toFixed(2)}%
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">0으로 수렴</td>
+                    <td className="py-2.5 px-3 text-slate-600">점점 0에 가까워짐</td>
                   </tr>
                   <tr>
                     <td className="py-2.5 px-3 font-medium text-slate-800">전체 둘레 길이</td>
@@ -512,7 +512,7 @@ export const MathPrincipleGuide: React.FC<MathPrincipleGuideProps> = ({
                     <td className="py-2.5 px-3 font-bold text-amber-700">
                       {(3 * Math.pow(1.5, calcN)).toFixed(2)}
                     </td>
-                    <td className="py-2.5 px-3 text-slate-600">무한대 발산 (∞)</td>
+                    <td className="py-2.5 px-3 text-slate-600">끝없이 계속 길어짐</td>
                   </tr>
                 </tbody>
               </table>
